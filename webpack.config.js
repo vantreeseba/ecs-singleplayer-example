@@ -1,7 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const proxyMiddleware = require('http-proxy-middleware');
 const isDev = true;
 
 // Define the Webpack config.
@@ -13,7 +12,7 @@ const config = {
   },
   entry: {
     app: [
-      './client/index.js',
+      './game/index.js',
     ],
   },
   output: {
@@ -35,13 +34,6 @@ if (isDev) {
     port: 8000,
     server: {
       baseDir: ['./dist'],
-      middleware: [
-        proxyMiddleware('/primus', {
-          target: 'http://127.0.0.1:7780',
-          changeOrigin: false,
-          ws: true
-        })
-      ],
     },
     open: false,
     ghostMode: false,

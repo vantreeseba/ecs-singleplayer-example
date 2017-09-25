@@ -11,16 +11,14 @@ class PlayerControl extends System {
   /**
    * constructor
    */
-  constructor({primus}) {
-    super(['playercontrol']);
+  constructor({tickRate}) {
+    super(['position', 'rotation', 'playercontrol'], tickRate);
 
     this.keys = new Keys();
     this.gamepad = new Gamepad();
 
     this.keys.update();
     this.gamepad.update();
-
-    this.primus = primus;
   }
 
   /**
@@ -31,18 +29,25 @@ class PlayerControl extends System {
     this.keys.update();
     this.gamepad.update();
 
-    let delta = {};
-    if(this.keys.hasDelta()) {
-      delta.keys = this.keys.delta;
-    }
-    if(this.gamepad.hasDelta()) {
-      delta.gamepad = this.gamepad.delta;
-    }
+    let speed = 5;
 
-    if(delta.keys || delta.gamepad) {
-      delta.timeStamp = Date.now();
-      this.primus.emit(MessageTypes.PLAYER_INPUT_SYNC, delta);
-    }
+    entities.forEach(ent => {
+      if(this.keys.isDown('a')) {
+        ent.position.x -= speed;
+      }
+
+      if(this.keys.isDown('d')) {
+        ent.position.x += speed;
+      }
+
+      if(this.keys.isDown('w')) {
+        ent.position.y -= speed;
+      }
+
+      if(this.keys.isDown('s')) {
+        ent.position.y += speed;
+      }
+    });
   }
 
 }

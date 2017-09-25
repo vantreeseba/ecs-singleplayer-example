@@ -8,14 +8,12 @@ class DebugRender extends System {
    * constructor
    */
   constructor() {
-    // TODO: Add appearance component.
     super(['position', 'appearance']);
 
     this.canvas = document.createElement('canvas');
     this.canvas.id = 'debugRender';
     this.canvas.width = 400;
     this.canvas.height= 400;
-
 
     document.body.appendChild(this.canvas);
 
