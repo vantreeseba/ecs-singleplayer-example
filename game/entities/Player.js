@@ -1,23 +1,18 @@
-const Entity = require('ECSEngine/entities/Entity');
 const Components = require('ECSEngine/components');
-const PixiAppearance = require('../components/PixiAppearance');
+const Paddle = require('./Paddle');
 
 /**
  * An example player entity.
  * @extends {Entity}
  */
-class Player extends Entity {
+class Player extends Paddle {
   /**
    * constructor
    */
   constructor() {
     super();
 
-    this.addComponent(new Components.position());
-    this.addComponent(new Components.rotation());
     this.addComponent(new Components.playerControl());
-    // this.addComponent(new Components.appearance());
-    this.addComponent(new PixiAppearance());
   }
 }
 

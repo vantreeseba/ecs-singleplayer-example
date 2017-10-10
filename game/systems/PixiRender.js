@@ -9,7 +9,7 @@ class PixiRender extends System {
    * constructor
    */
   constructor() {
-    super(['position', 'rotation', 'pixiappearance'], 60, 1);
+    super(['position', 'pixiappearance'], 60, 1);
 
     this.pixiApp = new PIXI.Application({
       autoStart: false,
@@ -43,14 +43,12 @@ class PixiRender extends System {
     for(; i < entities.length; i += 1) {
       entity = entities[i];
       pos = entity.position;
-      rot = entity.rotation.value;
 
       if(!this.entitySprites[entity.id]) {
         this.addSprite(entity);
       }
 
       this.entitySprites[entity.id].position.copy(pos);
-      this.entitySprites[entity.id].rotation = rot;
     }
 
     this.pixiApp.ticker.update();

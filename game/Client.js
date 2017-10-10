@@ -1,5 +1,6 @@
 const Player = require('./entities/Player');
 const Npc = require('./entities/Npc');
+const Ball = require('./entities/Ball');
 const Systems = require('./systems');
 
 const Engine = require('ECSEngine/Engine.js');
@@ -16,39 +17,27 @@ class Client extends Engine {
 
     this.debug = true;
 
-    this.systems = Object.keys(Systems).map(system => new Systems[system]({
-      engine: this,
-      tickRate: 30,
-    }));
 
-    if(this.debug) {
-      this.html = {};
-      this.html.debugStats = document.createElement('div');
-      let debugTitle = document.createElement('div');
-      this.html.debugStats.style.position = 'absolute';
-      this.html.debugStats.style.top = '100px';
-      this.html.debugStats.style.right = '100px';
+    this.entities.addEntity(new Player());
 
-      debugTitle.innerText = 'STATS';
-      this.html.debugStats.appendChild(debugTitle);
+    let npc = new Npc();
+    npc.position.x = 500;
+    this.entities.addEntity(npc);
 
-      this.html.debugFPS = document.createElement('div');
-      this.html.debugStats.appendChild(this.html.debugFPS);
+    let ball = new Ball();
+    ball.position.x = 200;
+    ball.position.y = 250;
+    ball.physics.vel.x = -2;
+    this.entities.addEntity(ball);
 
-      this.systems.forEach(s => {
-        let n = 'debug' + s.name;
-        this.html[n] = document.createElement('div');
-        this.html.debugStats.appendChild(this.html[n]);
-      });
+    Object.keys(Systems).forEach(system => {
+      this.systems.addSystem(new Systems[system]({
+        engine: this,
+        tickRate: 30,
+      }));
+    });
 
-      document.body.appendChild(this.html.debugStats);
-    }
-
-
-    for(var i = 0; i < 1000; i++) {
-      this.entities.push(new Npc());
-    }
-    this.entities.push(new Player());
+    this.initDebugHtml();
   }
 
   /**
@@ -63,6 +52,36 @@ class Client extends Engine {
     }
   }
 
+
+  /**
+   * initDebugHtml
+   */
+  initDebugHtml() {
+    if(this.debug) {
+      this.html = {};
+      this.html.debugStats = document.createElement('div');
+      let debugTitle = document.createElement('div');
+      this.html.debugStats.style.position = 'absolute';
+      this.html.debugStats.style.top = '100px';
+      this.html.debugStats.style.right = '100px';
+
+      debugTitle.innerText = 'STATS';
+      this.html.debugStats.appendChild(debugTitle);
+
+      this.html.debugFPS = document.createElement('div');
+      this.html.debugStats.appendChild(this.html.debugFPS);
+
+      this.systems.systems.forEach(s => {
+        let n = 'debug' + s.name;
+        this.html[n] = document.createElement('div');
+        this.html.debugStats.appendChild(this.html[n]);
+      });
+
+      document.body.appendChild(this.html.debugStats);
+    }
+
+  }
+
   /**
    * displayDebugInfo
    */
@@ -73,6 +92,8 @@ class Client extends Engine {
       let t = this.debugStats.systems[key].time.toFixed(4);
       this.html['debug' + key].innerHTML = `<br/> ${key} <br/>
         ENTITY_COUNT: ${this.debugStats.systems[key].entityCount} <br/>
+        TICK_RATE: ${this.debugStats.systems[key].tickRate} <br/>
+        CATCHUPS: ${this.debugStats.systems[key].catchupAttempts} <br/>
         TIME: ${t} <br/>
         `;
     });
