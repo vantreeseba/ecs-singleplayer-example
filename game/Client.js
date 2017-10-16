@@ -18,22 +18,25 @@ class Client extends Engine {
     this.debug = true;
 
 
-    this.entities.addEntity(new Player());
+    let player = new Player();
+    player.position.x = 80;
+    this.entities.addEntity(player);
 
     let npc = new Npc();
-    npc.position.x = 500;
+    npc.position.x = 1620;
     this.entities.addEntity(npc);
 
     let ball = new Ball();
-    ball.position.x = 200;
+    ball.position.x = 1800 / 2;
     ball.position.y = 250;
-    ball.physics.vel.x = -2;
+    ball.physics.vel.x = -20;
+    ball.physics.maxSpeed = 0.25;
     this.entities.addEntity(ball);
 
     Object.keys(Systems).forEach(system => {
       this.systems.addSystem(new Systems[system]({
         engine: this,
-        tickRate: 30,
+        tickRate: 60,
       }));
     });
 
@@ -61,9 +64,10 @@ class Client extends Engine {
       this.html = {};
       this.html.debugStats = document.createElement('div');
       let debugTitle = document.createElement('div');
+      this.html.debugStats.style.backgroundColor = '#cccccc'; 
       this.html.debugStats.style.position = 'absolute';
-      this.html.debugStats.style.top = '100px';
-      this.html.debugStats.style.right = '100px';
+      this.html.debugStats.style.top = '10px';
+      this.html.debugStats.style.right = '10px';
 
       debugTitle.innerText = 'STATS';
       this.html.debugStats.appendChild(debugTitle);
@@ -86,7 +90,9 @@ class Client extends Engine {
    * displayDebugInfo
    */
   displayDebugInfo() {
-    this.html.debugFPS.innerText = `FPS: ${Math.round(this.debugStats.fps)}`;
+    this.html.debugFPS.innerText = `FPS 5: ${Math.round(this.debugStats.fps5)} \n`;
+    this.html.debugFPS.innerText += `FPS 10: ${Math.round(this.debugStats.fps10)} \n`;
+    this.html.debugFPS.innerText += `FPS 30: ${Math.round(this.debugStats.fps30)}`;
 
     Object.keys(this.debugStats.systems).forEach(key => {
       let t = this.debugStats.systems[key].time.toFixed(4);

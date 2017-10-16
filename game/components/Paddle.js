@@ -8,6 +8,6 @@ module.exports = class Paddle extends Component {
    * constructor
    */
   constructor() {
-    super({movingUp: false, movingDown: false});
+    super({movingUp: false, movingDown: false, speed: 5});
   }
 };

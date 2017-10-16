@@ -17,15 +17,13 @@ class PaddleMovement extends System {
    * @param {Array} entities
    */
   update(entities) {
-    let speed = 5;
-
     entities.forEach(ent => {
       if(ent.paddle.movingUp) {
-        ent.position.y -= speed;
+        ent.position.y -= ent.paddle.speed;
       }
 
       if(ent.paddle.movingDown) {
-        ent.position.y += speed;
+        ent.position.y += ent.paddle.speed;
       }
     });
   }

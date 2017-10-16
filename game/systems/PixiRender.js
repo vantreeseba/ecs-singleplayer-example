@@ -11,9 +11,15 @@ class PixiRender extends System {
   constructor() {
     super(['position', 'pixiappearance'], 60, 1);
 
+    const w = 1800;
+    const h = 1080;
+    const ratio = w/h;
+
     this.pixiApp = new PIXI.Application({
       autoStart: false,
       sharedTicker: true,
+      width: w,
+      height: h,
     });
 
     this.pixiApp.ticker.stop();

@@ -62,6 +62,20 @@ class Physics extends System {
     }
   }
 
+  checkForWallCollisions(entities) {
+    for(let i = 0; i < entities.length; i++) {
+      const ent = entities[i];
+      if(ent.ball) {
+        if(ent.position.x < 0) {
+          this.events.emit('collision', {a: {wall: true}, b:ent});
+        }
+        if(ent.position.x > 1800) {
+          this.events.emit('collision', {a: end, b: {wall:true}});
+        }
+      }
+    }
+  }
+
   /**
    * Run the system on the entities.
    * @param {Array} entities
@@ -79,6 +93,7 @@ class Physics extends System {
     }
 
     this.checkForCollisions(entities);
+    this.checkForWallCollisions(entities);
   }
 }
 

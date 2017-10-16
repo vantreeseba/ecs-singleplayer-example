@@ -10,7 +10,9 @@ class Collision extends System {
   constructor({engine}) {
     super([]);
 
-    engine.events.on('collision', this.onCollision);
+    this.engine = engine;
+
+    engine.events.on('collision', this.onCollision.bind(this));
   }
 
   /**
@@ -18,6 +20,11 @@ class Collision extends System {
    * @param {Object} data
    */
   onCollision(data) {
+    if(data.a.wall || data.b.wall) {
+      this.engine.events.emit('ballHitWall', {left: data.a.wall, right: data.b.wall});
+      return;
+    }
+
     if(data.a.ball) {
       data.a.physics.vel.x = -data.a.physics.vel.x;
       data.a.physics.vel.y = 0.5 - Math.random();

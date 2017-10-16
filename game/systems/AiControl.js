@@ -1,4 +1,5 @@
 const System = require('ECSEngine/systems/System');
+const Utils = require('ECSEngine/utils');
 
 /**
  * @type {PlayerControl}
@@ -19,11 +20,13 @@ class AiControl extends System {
    */
   update(entities) {
     entities.forEach(ent => {
-      ent.paddle.movingDown = this.ball.position.y + 10> ent.position.y;
-      ent.paddle.movingUp = this.ball.position.y - 10 < ent.position.y;
+      const diff = Math.abs(this.ball.position.y - ent.position.y);
+
+      ent.paddle.speed = Utils.map(diff, 0, 100, 0.5, 5);
+      ent.paddle.movingDown = this.ball.position.y + 5 > ent.position.y;
+      ent.paddle.movingUp = this.ball.position.y - 5 < ent.position.y;
     });
   }
-
 }
 
 module.exports = AiControl;
